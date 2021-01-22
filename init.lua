@@ -97,7 +97,7 @@ _private.titlebar_font = "Sans 11"
 _private.titlebar_items = {
     left = {"close", "minimize", "maximize"},
     middle = "title",
-    right = {"sticky", "ontop", "floating"},
+    right = {"sticky", "ontop", "recolor"},
 }
 _private.context_menu_theme = {
     bg_focus = "#aed9e0",
@@ -142,7 +142,7 @@ _private.tooltip_messages = {
 _private.close_color = "#ee4266"
 _private.minimize_color = "#ffb400"
 _private.maximize_color = "#4CBB17"
-_private.floating_color = "#f6a2ed"
+_private.recolor_color = "#f6a2ed"
 _private.ontop_color = "#f6a2ed"
 _private.sticky_color = "#f6a2ed"
 -- ------------------------------------------------------------
@@ -534,12 +534,13 @@ local function get_titlebar_item(c, name)
     elseif name == "ontop" then
         return create_titlebar_button(
                    c, name, function() c.ontop = not c.ontop end, "ontop")
-    elseif name == "floating" then
+    elseif name == "recolor" then
         return create_titlebar_button(
                    c, name, function()
-                c.floating = not c.floating
-                if c.floating then c.maximized = false end
-            end, "floating")
+                c._nice_base_color = get_dominant_color(c)
+                set_color_rule(c, c._nice_base_color)
+                _private.add_window_decorations(c)
+            end, "recolor")
     elseif name == "sticky" then
         return create_titlebar_button(
                    c, name, function()
