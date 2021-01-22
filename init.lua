@@ -5,7 +5,6 @@ local pairs = pairs
 local ipairs = ipairs
 -- > Awesome WM LIBS
 local awful = require("awful")
-local atooltip = awful.tooltip
 local abutton = awful.button
 local wibox = require("wibox")
 local get_font_height = require("beautiful").get_font_height
@@ -126,19 +125,6 @@ _private.button_margin_top = 2
 -- _private.button_margin_bottom = 0
 -- _private.button_margin_left = 0
 -- _private.button_margin_right = 0
-_private.tooltips_enabled = true
-_private.tooltip_messages = {
-    close = "close",
-    minimize = "minimize",
-    maximize_active = "unmaximize",
-    maximize_inactive = "maximize",
-    floating_active = "enable tiling mode",
-    floating_inactive = "enable floating mode",
-    ontop_active = "don't keep above other windows",
-    ontop_inactive = "keep above other windows",
-    sticky_active = "disable sticky mode",
-    sticky_inactive = "enable sticky mode",
-}
 _private.close_color = "#ee4266"
 _private.minimize_color = "#ffb400"
 _private.maximize_color = "#4CBB17"
@@ -289,21 +275,6 @@ local gears = require("gears")
 -- Creates a titlebar button widget
 local function create_titlebar_button(c, name, button_callback, property)
     local button_img = imagebox(nil, false)
-    if _private.tooltips_enabled then
-        local tooltip = atooltip {
-            timer_function = function()
-                return _private.tooltip_messages[name ..
-                           (property and
-                               (c[property] and "_active" or "_inactive") or "")]
-            end,
-            delay_show = 0.5,
-            margins_leftright = 12,
-            margins_topbottom = 6,
-            timeout = 0.25,
-            align = "bottom_right",
-        }
-        tooltip:add_to_object(button_img)
-    end
     local is_on, is_focused
     local event = "normal"
     local function update()
@@ -905,7 +876,6 @@ function nice.initialize(args)
     local table_args = {
         titlebar_items = true,
         context_menu_theme = true,
-        tooltip_messages = true,
     }
     if args then
         for prop, value in pairs(args) do
