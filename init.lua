@@ -116,9 +116,9 @@ _private.button_margin_top = 2
 _private.close_color = "#ee4266"
 _private.minimize_color = "#ffb400"
 _private.maximize_color = "#4CBB17"
-_private.recolor_color = "#f6a2ed"
-_private.ontop_color = "#f6a2ed"
-_private.sticky_color = "#f6a2ed"
+_private.recolor_color = "#ee426600"
+_private.ontop_color = "#ffb40000"
+_private.sticky_color = "#4cbb1700"
 -- ------------------------------------------------------------
 
 -- => Saving and loading of color rules
@@ -236,7 +236,8 @@ local function create_button_image(name, is_focused, event, is_on)
         local button_color = base_color
         local H = colors.hex2hsv(base_color)
         -- Unfocused buttons are desaturated and darkened (except when they are being hovered over)
-        if not is_focused and event ~= "hover" then
+        local ignore_focus = { recolor = true, sticky = true, ontop = true }
+        if not is_focused and event ~= "hover" and not ignore_focus[name] then
             button_color = colors.hsv2hex(H, 0, 50)
         end
         -- Then the color is lightened if the button is being hovered over, or darkened if it is being pressed, otherwise it is left as is
